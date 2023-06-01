@@ -114,12 +114,12 @@ function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
   // sliders -> hd - Agents in your team, ss - orders per month
 
-  console.log(
-    "updateSliderValue log ---- numId: ",
-    numId,
-    "numValue: ",
-    numValue
-  )
+  //   console.log(
+  //     "updateSliderValue log ---- numId: ",
+  //     numId,
+  //     "numValue: ",
+  //     numValue
+  //   )
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
