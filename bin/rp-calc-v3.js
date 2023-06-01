@@ -199,7 +199,10 @@ function calcSSPrice() {
   text_discount_price.style.display = "flex"
   text_discount_none.style.display = "none"
 
-  if (num_orders.value >= 0 && num_orders.value <= 1000) {
+  if (num_orders.value == 0) {
+    ss_amount = 0
+  }
+  if (num_orders.value > 0 && num_orders.value <= 1000) {
     ss_amount = 100
   }
   if (num_orders.value > 1000 && num_orders.value <= 3500) {
