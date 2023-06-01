@@ -40,7 +40,7 @@ const wrapper_discount_div = document.getElementById("wrapper--discount-div")
 // Initialize Webflow, then addEventListener for all dynamic elements
 var Webflow = Webflow || []
 Webflow.push(function () {
-  // // TODO: Add Event Listener for all dynamic elements
+  // TODO: Add Event Listener for all dynamic elements
   // eg
   // document.getElementById("elementId").addEventListener("eventType", "handlerFunction()");
 
@@ -58,11 +58,11 @@ Webflow.push(function () {
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
-  num_agents.setAttribute("onchange", "calcHDPrice()")
+  // num_agents.setAttribute("onchange", "calcHDPrice()")
   sel_helpdesk_plan.setAttribute("onchange", "calcHDPrice()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
 
-  num_orders.setAttribute("onchange", "calcSSPrice()")
+  // num_orders.setAttribute("onchange", "calcSSPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 })
 
@@ -81,14 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function setElementVisibility() {
-  // // TODO: Show/Hide elements based on user input selections
-  // 20% discount wrapper on calculator output section
+  // TODO: Show/Hide elements based on user input selections
+  // 1. 20% discount wrapper on calculator output section
   // Show if pay annually is selected
   wrapper_discount_div.style.display = cb_pay_annually.checked ? "flex" : "none"
 }
 
 function updateAmountSpan() {
-  // // TODO: Update the amount span with the calculated amount
+  // TODO: Update the amount span with the calculated amount
   // spans -> ss-amount, hd-amount, total-amount
   span_helpdesk_price_val.textContent = hd_amount.toLocaleString()
   span_selfservice_price_val.textContent = ss_amount.toLocaleString()
@@ -114,7 +114,12 @@ function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
   // sliders -> hd - Agents in your team, ss - orders per month
 
-  // console.log("log ---- numId: ", numId, "numValue: ", numValue)
+  console.log(
+    "updateSliderValue log ---- numId: ",
+    numId,
+    "numValue: ",
+    numValue
+  )
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
@@ -122,10 +127,12 @@ function updateSliderValue(numId, numValue) {
 
   if (numId === "num-agents-on-team") {
     agents_slider.value = numValue
+    calcHDPrice()
   }
 
   if (numId === "num-orders-per-month") {
     orders_slider.value = numValue
+    calcSSPrice()
   }
 }
 
@@ -177,7 +184,7 @@ function calcHDPrice() {
 }
 
 function calcSSPrice() {
-  // // TODO: Calculate the Self Serve price based on the number of orders per month.
+  // TODO: Calculate the Self Serve price based on the number of orders per month.
   // Auto calculate SS Plan based on Orders/mo tier
   // 0-1000 orders -> "Starter"
   // 1000-3500 -> "Regular"
