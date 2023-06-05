@@ -1,6 +1,6 @@
-// Declare Self Serve and Help Desk amounts as global variables
 let ss_amount = 0
 let hd_amount = 0
+let hd_plan_override = false
 
 // getElements
 
@@ -40,13 +40,12 @@ const wrapper_discount_div = document.getElementById("wrapper--discount-div")
 // Initialize Webflow, then addEventListener for all dynamic elements
 var Webflow = Webflow || []
 Webflow.push(function () {
-  // TODO: Add Event Listener for all dynamic elements
-  // eg
-  // document.getElementById("elementId").addEventListener("eventType", "handlerFunction()");
-
+  // // TODO: Add Event Listener for all dynamic elements
+  
   agents_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
+    // "updateNumericValue(this.id, this.value)"
   )
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
@@ -54,22 +53,33 @@ Webflow.push(function () {
   orders_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
+    // "updateNumericValue(this.id, this.value)"
   )
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
-  // num_agents.setAttribute("onchange", "calcHDPrice()")
-  sel_helpdesk_plan.setAttribute("onchange", "calcHDPrice()")
+  sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
 
-  // num_orders.setAttribute("onchange", "calcSSPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 })
 
+function setHelpDeskOverrride() {
+  hd_plan_override = true
+  calcHDPrice()
+}
+
 function sliderHandler(sliderId, sliderValue) {
-  // console.log("sliderHandler log ---- sliderId: ", sliderId, "sliderValue: ", sliderValue)
+  if (sliderId !== "agents-slider" && sliderId !== "orders-slider") {
+    return
+  }
+
   updateNumericValue(sliderId, sliderValue)
+
   if (sliderId === "agents-slider") {
+    if (hd_plan_override === false) {
+      helpDeskPlanSliderOverride()
+    }
     calcHDPrice()
   }
   if (sliderId === "orders-slider") {
@@ -87,9 +97,9 @@ cb_pay_annually.addEventListener("change", (event) => {
   // }
 })
 
-document.addEventListener("DOMContentLoaded", function () {
-  // TODO: Run main calcMain() on page load to initialize the calculations and dynamic elements
-})
+//document.addEventListener("DOMContentLoaded", function () {
+  // //TODO: Run main calcMain() on page load to initialize the calculations and dynamic elements
+//})
 
 function setElementVisibility() {
   // TODO: Show/Hide elements based on user input selections
@@ -123,14 +133,6 @@ function updateAmountSpan() {
 
 function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
-  // sliders -> hd - Agents in your team, ss - orders per month
-
-  // console.log(
-  //   "updateSliderValue log ---- numId: ",
-  //   numId,
-  //   "numValue: ",
-  //   numValue
-  // )
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
@@ -149,9 +151,6 @@ function updateSliderValue(numId, numValue) {
 
 function updateNumericValue(sliderId, sliderValue) {
   // // TODO: Update the number value when the slider is changed
-  // Numbers -> hd - Agents in your team, ss - orders per month
-
-  // console.log("log ---- sliderId: ", sliderId, "sliderValue: ", sliderValue)
 
   if (sliderId !== "agents-slider" && sliderId !== "orders-slider") {
     return
@@ -163,6 +162,20 @@ function updateNumericValue(sliderId, sliderValue) {
   if (sliderId === "orders-slider") {
     num_orders.value = sliderValue
   }
+}
+
+function helpDeskPlanSliderOverride() {
+  if (agents_slider.value >= 0 && agents_slider.value <= 5) {
+    sel_helpdesk_plan.value = "starter"
+  }
+  if (agents_slider.value > 5 && agents_slider.value <= 15) {
+    sel_helpdesk_plan.value = "regular"
+  }
+  if (agents_slider.value > 15) {
+    sel_helpdesk_plan.value = "pro"
+  }
+
+  calcHDPrice()
 }
 
 function calcHDPrice() {
@@ -195,6 +208,9 @@ function calcHDPrice() {
 }
 
 function calcSSPrice() {
+  // TODO: Calculate the Self Serve price based on the number of orders per month.
+  // Auto calculate SS Plan based on Orders/mo tier
+
   // styles reset
   text_ss_price.style.display = "flex"
   label_ss_custom_price.style.display = "none"
