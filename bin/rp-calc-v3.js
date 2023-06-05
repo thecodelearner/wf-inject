@@ -41,11 +41,10 @@ const wrapper_discount_div = document.getElementById("wrapper--discount-div")
 var Webflow = Webflow || []
 Webflow.push(function () {
   // // TODO: Add Event Listener for all dynamic elements
-  
+
   agents_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
-    // "updateNumericValue(this.id, this.value)"
   )
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
@@ -97,9 +96,9 @@ cb_pay_annually.addEventListener("change", (event) => {
   // }
 })
 
-//document.addEventListener("DOMContentLoaded", function () {
-  // //TODO: Run main calcMain() on page load to initialize the calculations and dynamic elements
-//})
+document.addEventListener("DOMContentLoaded", function () {
+  // TODO: Run main calcMain() on page load to initialize the calculations and dynamic elements
+})
 
 function setElementVisibility() {
   // TODO: Show/Hide elements based on user input selections
@@ -133,6 +132,7 @@ function updateAmountSpan() {
 
 function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
+  // sliders -> hd - Agents in your team, ss - orders per month
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
@@ -140,6 +140,8 @@ function updateSliderValue(numId, numValue) {
 
   if (numId === "num-agents-on-team") {
     agents_slider.value = numValue
+    // setHelpDeskOverrride()
+    helpDeskPlanSliderOverride()
     calcHDPrice()
   }
 
@@ -173,6 +175,9 @@ function helpDeskPlanSliderOverride() {
   }
   if (agents_slider.value > 15) {
     sel_helpdesk_plan.value = "pro"
+  }
+  if (agents_slider.value > 100) {
+    sel_helpdesk_plan.value = "enterprise"
   }
 
   calcHDPrice()
