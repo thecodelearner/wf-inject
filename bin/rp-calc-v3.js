@@ -46,14 +46,14 @@ Webflow.push(function () {
 
   agents_slider.setAttribute(
     "oninput",
-    "updateNumericValue(this.id, this.value)"
+    "sliderHandler(this.id, this.value)"
   )
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
   orders_slider.setAttribute(
     "oninput",
-    "updateNumericValue(this.id, this.value)"
+    "sliderHandler(this.id, this.value)"
   )
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
@@ -65,6 +65,17 @@ Webflow.push(function () {
   // num_orders.setAttribute("onchange", "calcSSPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 })
+
+function sliderHandler(sliderId, sliderValue) {
+  // console.log("sliderHandler log ---- sliderId: ", sliderId, "sliderValue: ", sliderValue)
+  updateNumericValue(sliderId, sliderValue)
+  if (sliderId === "agents-slider") {
+    calcHDPrice()
+  }
+  if (sliderId === "orders-slider") {
+    calcSSPrice()
+  }
+}
 
 cb_pay_annually.addEventListener("change", (event) => {
   setElementVisibility()
@@ -114,12 +125,12 @@ function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
   // sliders -> hd - Agents in your team, ss - orders per month
 
-  //   console.log(
-  //     "updateSliderValue log ---- numId: ",
-  //     numId,
-  //     "numValue: ",
-  //     numValue
-  //   )
+  // console.log(
+  //   "updateSliderValue log ---- numId: ",
+  //   numId,
+  //   "numValue: ",
+  //   numValue
+  // )
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
@@ -184,13 +195,6 @@ function calcHDPrice() {
 }
 
 function calcSSPrice() {
-  // TODO: Calculate the Self Serve price based on the number of orders per month.
-  // Auto calculate SS Plan based on Orders/mo tier
-  // 0-1000 orders -> "Starter"
-  // 1000-3500 -> "Regular"
-  // 3500-10000 -> "Pro"
-  // 10000+ -> "Enterprise"
-
   // styles reset
   text_ss_price.style.display = "flex"
   label_ss_custom_price.style.display = "none"
@@ -199,7 +203,7 @@ function calcSSPrice() {
   text_discount_price.style.display = "flex"
   text_discount_none.style.display = "none"
 
-  if (num_orders.value == 0) {
+  if (num_orders.value <= 0) {
     ss_amount = 0
   }
   if (num_orders.value > 0 && num_orders.value <= 1000) {
