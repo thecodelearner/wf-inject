@@ -1,3 +1,4 @@
+// Declarations
 let ss_amount = 0
 let hd_amount = 0
 let hd_plan_override = false
@@ -40,14 +41,11 @@ const wrapper_discount_div = document.getElementById("wrapper--discount-div")
 // Initialize Webflow, then addEventListener for all dynamic elements
 var Webflow = Webflow || []
 Webflow.push(function () {
-  // TODO: Add Event Listener for all dynamic elements
-  // eg
-  // document.getElementById("elementId").addEventListener("eventType", "handlerFunction()");
+  // // TODO: Add Event Listener for all dynamic elements
 
   agents_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
-    // "updateNumericValue(this.id, this.value)"
   )
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
@@ -55,16 +53,13 @@ Webflow.push(function () {
   orders_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
-    // "updateNumericValue(this.id, this.value)"
   )
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
-  // num_agents.setAttribute("onchange", "calcHDPrice()")
   sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
 
-  // num_orders.setAttribute("onchange", "calcSSPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 })
 
@@ -83,6 +78,9 @@ function sliderHandler(sliderId, sliderValue) {
   if (sliderId === "agents-slider") {
     if (hd_plan_override === false) {
       helpDeskPlanSliderOverride()
+    }
+    if (num_agents.value <= 100) {
+      sel_helpdesk_plan.disabled = false
     }
     calcHDPrice()
   }
@@ -137,7 +135,6 @@ function updateAmountSpan() {
 
 function updateSliderValue(numId, numValue) {
   //  // TODO: Update the slider value when the number amount is changed
-  // sliders -> hd - Agents in your team, ss - orders per month
 
   if (numId !== "num-agents-on-team" && numId !== "num-orders-per-month") {
     return
@@ -166,8 +163,9 @@ function updateNumericValue(sliderId, sliderValue) {
   if (sliderId === "agents-slider") {
     num_agents.value = sliderValue
     if (sliderValue > 100) {
-      num_agents.value = 100 + "+"
+      num_agents.value = "100+"
       sel_helpdesk_plan.value = "enterprise"
+      sel_helpdesk_plan.disabled = true
     }
   }
   if (sliderId === "orders-slider") {
@@ -176,6 +174,10 @@ function updateNumericValue(sliderId, sliderValue) {
 }
 
 function helpDeskPlanSliderOverride() {
+  if (hd_plan_override === true) {
+    return
+  }
+
   if (agents_slider.value >= 0 && agents_slider.value <= 5) {
     sel_helpdesk_plan.value = "starter"
   }
@@ -223,11 +225,7 @@ function calcHDPrice() {
 
 function calcSSPrice() {
   // TODO: Calculate the Self Serve price based on the number of orders per month.
-  // Auto calculate SS Plan based on Orders/mo tier
-  // 0-1000 orders -> "Starter"
-  // 1000-3500 -> "Regular"
-  // 3500-10000 -> "Pro"
-  // 10000+ -> "Enterprise"
+  // Auto calculate SS Plan based on orders tier
 
   // styles reset
   text_ss_price.style.display = "flex"
