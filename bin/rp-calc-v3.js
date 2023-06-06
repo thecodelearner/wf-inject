@@ -40,11 +40,14 @@ const wrapper_discount_div = document.getElementById("wrapper--discount-div")
 // Initialize Webflow, then addEventListener for all dynamic elements
 var Webflow = Webflow || []
 Webflow.push(function () {
-  // // TODO: Add Event Listener for all dynamic elements
+  // TODO: Add Event Listener for all dynamic elements
+  // eg
+  // document.getElementById("elementId").addEventListener("eventType", "handlerFunction()");
 
   agents_slider.setAttribute(
     "oninput",
     "sliderHandler(this.id, this.value)"
+    // "updateNumericValue(this.id, this.value)"
   )
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
@@ -57,9 +60,11 @@ Webflow.push(function () {
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
+  // num_agents.setAttribute("onchange", "calcHDPrice()")
   sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
 
+  // num_orders.setAttribute("onchange", "calcSSPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 })
 
@@ -160,6 +165,10 @@ function updateNumericValue(sliderId, sliderValue) {
 
   if (sliderId === "agents-slider") {
     num_agents.value = sliderValue
+    if (sliderValue > 100) {
+      num_agents.value = 100 + "+"
+      sel_helpdesk_plan.value = "enterprise"
+    }
   }
   if (sliderId === "orders-slider") {
     num_orders.value = sliderValue
@@ -215,6 +224,10 @@ function calcHDPrice() {
 function calcSSPrice() {
   // TODO: Calculate the Self Serve price based on the number of orders per month.
   // Auto calculate SS Plan based on Orders/mo tier
+  // 0-1000 orders -> "Starter"
+  // 1000-3500 -> "Regular"
+  // 3500-10000 -> "Pro"
+  // 10000+ -> "Enterprise"
 
   // styles reset
   text_ss_price.style.display = "flex"
