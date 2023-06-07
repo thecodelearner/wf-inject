@@ -119,7 +119,7 @@ function updateAmountSpan() {
     span_total_price_val.textContent = (ss_amount + hd_amount).toLocaleString()
   }
 
-  if (sel_helpdesk_plan.value === "enterprise" || num_orders.value > 10000) {
+  if (sel_helpdesk_plan.value === "enterprise" || num_orders.value >= 10000) {
     text_total_price.style.display = "none"
     label_total_custom_price.style.display = "flex"
     text_discount_price.style.display = "none"
