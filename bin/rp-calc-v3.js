@@ -43,17 +43,11 @@ var Webflow = Webflow || []
 Webflow.push(function () {
   // // TODO: Add Event Listener for all dynamic elements
 
-  agents_slider.setAttribute(
-    "oninput",
-    "sliderHandler(this.id, this.value)"
-  )
+  agents_slider.setAttribute("oninput", "sliderHandler(this.id, this.value)")
 
   num_agents.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
-  orders_slider.setAttribute(
-    "oninput",
-    "sliderHandler(this.id, this.value)"
-  )
+  orders_slider.setAttribute("oninput", "sliderHandler(this.id, this.value)")
 
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
@@ -162,7 +156,7 @@ function updateNumericValue(sliderId, sliderValue) {
 
   if (sliderId === "agents-slider") {
     num_agents.value = sliderValue
-    if (sliderValue > 100) {
+    if (sliderValue >= 100) {
       num_agents.value = "100+"
       sel_helpdesk_plan.value = "enterprise"
       sel_helpdesk_plan.disabled = true
@@ -187,7 +181,7 @@ function helpDeskPlanSliderOverride() {
   if (agents_slider.value > 15) {
     sel_helpdesk_plan.value = "pro"
   }
-  if (agents_slider.value > 100) {
+  if (agents_slider.value >= 100) {
     sel_helpdesk_plan.value = "enterprise"
   }
 
@@ -244,10 +238,10 @@ function calcSSPrice() {
   if (num_orders.value > 1000 && num_orders.value <= 3500) {
     ss_amount = 300
   }
-  if (num_orders.value > 3500 && num_orders.value <= 10000) {
+  if (num_orders.value > 3500 && num_orders.value < 10000) {
     ss_amount = 600
   }
-  if (num_orders.value > 10000) {
+  if (num_orders.value >= 10000) {
     ss_amount = 0
     text_ss_price.style.display = "none"
     label_ss_custom_price.style.display = "flex"
