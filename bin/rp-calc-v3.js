@@ -172,13 +172,13 @@ function helpDeskPlanSliderOverride() {
     return
   }
 
-  if (agents_slider.value >= 0 && agents_slider.value <= 5) {
+  if (agents_slider.value >= 0 && agents_slider.value < 10) {
     sel_helpdesk_plan.value = "starter"
   }
-  if (agents_slider.value > 5 && agents_slider.value <= 15) {
+  if (agents_slider.value >= 10 && agents_slider.value < 20) {
     sel_helpdesk_plan.value = "regular"
   }
-  if (agents_slider.value > 15) {
+  if (agents_slider.value >= 20) {
     sel_helpdesk_plan.value = "pro"
   }
   if (agents_slider.value >= 100) {
