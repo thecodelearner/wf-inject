@@ -112,13 +112,14 @@ function updateAmountSpan() {
 
   //   let totalAmount = ss_amount + hd_amount
 
-  if (cb_pay_annually.checked) {
-    // TODO: Update with deferred annual amounts calculated individually within each calc function
-    // span_discount_price_val.textContent = (totalAmount * 0.2).toLocaleString()
-    // span_total_price_val.textContent = (totalAmount * 0.8).toLocaleString()
-  } else {
-    span_total_price_val.textContent = (ss_amount + hd_amount).toLocaleString()
-  }
+  //   if (cb_pay_annually.checked) {
+  //     // TODO: Update with deferred annual amounts calculated individually within each calc function
+  //     // span_discount_price_val.textContent = (totalAmount * 0.2).toLocaleString()
+  //     // span_total_price_val.textContent = (totalAmount * 0.8).toLocaleString()
+
+  //   } else {
+  span_total_price_val.textContent = (ss_amount + hd_amount).toLocaleString()
+  //   }
 
   if (sel_helpdesk_plan.value === "enterprise" || num_orders.value >= 501) {
     text_total_price.style.display = "none"
