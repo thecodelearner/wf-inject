@@ -1,6 +1,8 @@
 // Declarations
 let ss_amount = 0
 let hd_amount = 0
+let diff_hd = 0
+let diff_ss = 0
 let disc_amt = 0
 let hd_plan_override = false
 
@@ -53,17 +55,21 @@ Webflow.push(function () {
   num_orders.setAttribute("onchange", "updateSliderValue(this.id, this.value)")
 
   sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
-  agents_slider.setAttribute("onchange", "calcHDPrice()")
 
+  agents_slider.setAttribute("onchange", "calcHDPrice()")
   orders_slider.setAttribute("onchange", "calcSSPrice()")
 
-  cb_pay_annually.setAttribute("onchange", "calcHDPrice()")
-  cb_pay_annually.setAttribute("onchange", "calcSSPrice()")
+  cb_pay_annually.setAttribute("onchange", "CalcMain()")
 })
 
 function setHelpDeskOverrride() {
   hd_plan_override = true
   calcHDPrice()
+}
+
+function CalcMain() {
+  calcHDPrice()
+  calcSSPrice()
 }
 
 function sliderHandler(sliderId, sliderValue) {
@@ -114,11 +120,15 @@ function updateAmountSpan() {
   span_helpdesk_price_val.textContent = hd_amount.toLocaleString()
   span_selfservice_price_val.textContent = ss_amount.toLocaleString()
 
-  //   let totalAmount = ss_amount + hd_amount
+  let diffAmount = diff_hd + diff_ss
+  let totalAmount = ss_amount + hd_amount
 
   if (cb_pay_annually.checked) {
     // TODO: Update with deferred annual amounts calculated individually within each calc function
-    span_discount_price_val.textContent = disc_amt.toLocaleString()
+    span_discount_price_val.textContent = diffAmount.toLocaleString()
+    span_total_price_val.textContent = (
+      totalAmount - diffAmount
+    ).toLocaleString()
   } else {
     span_total_price_val.textContent = (ss_amount + hd_amount).toLocaleString()
   }
@@ -206,17 +216,20 @@ function calcHDPrice() {
   if (!cb_pay_annually.checked) {
     if (sel_helpdesk_plan.value === "free") {
       hd_amount = num_agents.value * 0
-      disc_amt += 0
+      diff_hd = 0
+      // disc_amt += 0
     }
 
     if (sel_helpdesk_plan.value === "starter") {
       hd_amount = num_agents.value * 29
-      disc_amt += 0
+      diff_hd = 0
+      // disc_amt += 0
     }
 
     if (sel_helpdesk_plan.value === "pro") {
       hd_amount = num_agents.value * 99
-      disc_amt += 0
+      diff_hd = 0
+      // disc_amt += 0
     }
     if (sel_helpdesk_plan.value === "enterprise") {
       hd_amount = 0
@@ -228,23 +241,26 @@ function calcHDPrice() {
   if (cb_pay_annually.checked) {
     if (sel_helpdesk_plan.value === "free") {
       hd_amount = num_agents.value * 0
-      disc_amt += 0
+      diff_hd = 0
+      // disc_amt += 0
     }
 
     if (sel_helpdesk_plan.value === "starter") {
-      hd_amount = num_agents.value * 20
-      disc_amt += (
-        num_agents.value * 29 -
-        num_agents.value * 20
-      ).toLocaleString()
+      hd_amount = num_agents.value * 29
+      diff_hd = num_agents.value * 9
+      // disc_amt += (
+      //   num_agents.value * 29 -
+      //   num_agents.value * 20
+      // ).toLocaleString()
     }
 
     if (sel_helpdesk_plan.value === "pro") {
-      hd_amount = num_agents.value * 85
-      disc_amt += (
-        num_agents.value * 99 -
-        num_agents.value * 85
-      ).toLocaleString()
+      hd_amount = num_agents.value * 99
+      diff_hd = num_agents.value * 14
+      // disc_amt += (
+      //   num_agents.value * 99 -
+      //   num_agents.value * 85
+      // ).toLocaleString()
     }
     if (sel_helpdesk_plan.value === "enterprise") {
       hd_amount = 0
@@ -271,12 +287,15 @@ function calcSSPrice() {
   if (!cb_pay_annually.checked) {
     if (num_orders.value <= 0) {
       ss_amount = 0
+      diff_ss = 0
     }
     if (num_orders.value > 0 && num_orders.value <= 50) {
       ss_amount = 0
+      diff_ss = 0
     }
     if (num_orders.value > 50 && num_orders.value <= 500) {
       ss_amount = 50
+      diff_ss = 0
     }
     if (num_orders.value >= 501) {
       ss_amount = 0
@@ -288,15 +307,18 @@ function calcSSPrice() {
   if (cb_pay_annually.checked) {
     if (num_orders.value <= 0) {
       ss_amount = 0
-      disc_amt += 0
+      diff_ss = 0
+      // disc_amt += 0
     }
     if (num_orders.value > 0 && num_orders.value <= 50) {
       ss_amount = 0
-      disc_amt += 0
+      diff_ss = 0
+      // disc_amt += 0
     }
     if (num_orders.value > 50 && num_orders.value <= 500) {
-      ss_amount = 42
-      disc_amt += Number(8).toLocaleString()
+      ss_amount = 50
+      diff_ss = 8
+      // disc_amt += Number(8).toLocaleString()
     }
     if (num_orders.value >= 501) {
       ss_amount = 0
