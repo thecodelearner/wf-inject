@@ -226,14 +226,17 @@ function calcHDPrice() {
   if (cb_pay_annually.checked) {
     if (sel_helpdesk_plan.value === "free") {
       hd_amount = num_agents.value * 0
+      span_discount_price_val.textContent = 0
     }
 
     if (sel_helpdesk_plan.value === "starter") {
       hd_amount = num_agents.value * 20
+      span_discount_price_val.textContent = ((num_agents.value * 29) - (num_agents.value * 20)).toLocaleString()
     }
 
     if (sel_helpdesk_plan.value === "pro") {
       hd_amount = num_agents.value * 85
+      span_discount_price_val.textContent = ((num_agents.value * 99) - (num_agents.value * 85)).toLocaleString()
     }
     if (sel_helpdesk_plan.value === "enterprise") {
       hd_amount = 0
@@ -283,6 +286,7 @@ function calcSSPrice() {
     }
     if (num_orders.value > 50 && num_orders.value <= 500) {
       ss_amount = 42
+      span_discount_price_val.textContent = Number(8).toLocaleString()
     }
     if (num_orders.value >= 501) {
       ss_amount = 0
