@@ -110,11 +110,12 @@ function updateAmountSpan() {
   span_helpdesk_price_val.textContent = hd_amount.toLocaleString()
   span_selfservice_price_val.textContent = ss_amount.toLocaleString()
 
-  let totalAmount = ss_amount + hd_amount
+  //   let totalAmount = ss_amount + hd_amount
 
   if (cb_pay_annually.checked) {
-    span_discount_price_val.textContent = (totalAmount * 0.2).toLocaleString()
-    span_total_price_val.textContent = (totalAmount * 0.8).toLocaleString()
+    // TODO: Update with deferred annual amounts calculated individually within each calc function
+    // span_discount_price_val.textContent = (totalAmount * 0.2).toLocaleString()
+    // span_total_price_val.textContent = (totalAmount * 0.8).toLocaleString()
   } else {
     span_total_price_val.textContent = (ss_amount + hd_amount).toLocaleString()
   }
@@ -199,22 +200,42 @@ function calcHDPrice() {
   text_discount_price.style.display = "flex"
   text_discount_none.style.display = "none"
 
+  if (!cb_pay_annually.checked) {
+    if (sel_helpdesk_plan.value === "free") {
+      hd_amount = num_agents.value * 0
+    }
 
-  if (sel_helpdesk_plan.value === "free") {
-    hd_amount = num_agents.value * 0
+    if (sel_helpdesk_plan.value === "starter") {
+      hd_amount = num_agents.value * 29
+    }
+
+    if (sel_helpdesk_plan.value === "pro") {
+      hd_amount = num_agents.value * 99
+    }
+    if (sel_helpdesk_plan.value === "enterprise") {
+      hd_amount = 0
+      text_hd_price.style.display = "none"
+      label_hd_custom_price.style.display = "flex"
+    }
   }
 
-  if (sel_helpdesk_plan.value === "starter") {
-    hd_amount = num_agents.value * 29
-  }
+  if (cb_pay_annually.checked) {
+    if (sel_helpdesk_plan.value === "free") {
+      hd_amount = num_agents.value * 0
+    }
 
-  if (sel_helpdesk_plan.value === "pro") {
-    hd_amount = num_agents.value * 99
-  }
-  if (sel_helpdesk_plan.value === "enterprise") {
-    hd_amount = 0
-    text_hd_price.style.display = "none"
-    label_hd_custom_price.style.display = "flex"
+    if (sel_helpdesk_plan.value === "starter") {
+      hd_amount = num_agents.value * 20
+    }
+
+    if (sel_helpdesk_plan.value === "pro") {
+      hd_amount = num_agents.value * 85
+    }
+    if (sel_helpdesk_plan.value === "enterprise") {
+      hd_amount = 0
+      text_hd_price.style.display = "none"
+      label_hd_custom_price.style.display = "flex"
+    }
   }
 
   updateAmountSpan()
@@ -232,19 +253,38 @@ function calcSSPrice() {
   text_discount_price.style.display = "flex"
   text_discount_none.style.display = "none"
 
-  if (num_orders.value <= 0) {
-    ss_amount = 0
+  if (!cb_pay_annually.checked) {
+    if (num_orders.value <= 0) {
+      ss_amount = 0
+    }
+    if (num_orders.value > 0 && num_orders.value <= 50) {
+      ss_amount = 0
+    }
+    if (num_orders.value > 50 && num_orders.value <= 500) {
+      ss_amount = 50
+    }
+    if (num_orders.value >= 501) {
+      ss_amount = 0
+      text_ss_price.style.display = "none"
+      label_ss_custom_price.style.display = "flex"
+    }
   }
-  if (num_orders.value > 0 && num_orders.value <= 50) {
-    ss_amount = 0
-  }
-  if (num_orders.value > 50 && num_orders.value <= 500) {
-    ss_amount = 50
-  }
-  if (num_orders.value >= 501) {
-    ss_amount = 0
-    text_ss_price.style.display = "none"
-    label_ss_custom_price.style.display = "flex"
+
+  if (cb_pay_annually.checked) {
+    if (num_orders.value <= 0) {
+      ss_amount = 0
+    }
+    if (num_orders.value > 0 && num_orders.value <= 50) {
+      ss_amount = 0
+    }
+    if (num_orders.value > 50 && num_orders.value <= 500) {
+      ss_amount = 42
+    }
+    if (num_orders.value >= 501) {
+      ss_amount = 0
+      text_ss_price.style.display = "none"
+      label_ss_custom_price.style.display = "flex"
+    }
   }
 
   updateAmountSpan()
