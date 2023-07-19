@@ -55,6 +55,9 @@ Webflow.push(function () {
   agents_slider.setAttribute("onchange", "calcHDPrice()")
 
   orders_slider.setAttribute("onchange", "calcSSPrice()")
+
+  cb_pay_annually.setAttribute("onchange", "calcHDPrice()")
+  cb_pay_annually.setAttribute("onchange", "calcSSPrice()")
 })
 
 function setHelpDeskOverrride() {
