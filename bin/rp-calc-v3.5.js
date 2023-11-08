@@ -68,6 +68,9 @@ Webflow.push(function () {
 
   sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
+
+  cb_pay_annually.setAttribute("onchange", "calcHDPrice()")
+  cb_pay_annually.setAttribute("onchange", "calcSSPrice()")
 })
 
 function setHelpDeskOverrride() {
