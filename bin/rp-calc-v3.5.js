@@ -1,6 +1,8 @@
 // Declarations
 let ss_amount = 0
 let hd_amount = 0
+let hd_span_amount = 0
+let ss_span_amount = 0
 let disc_amount_hd = 0
 let disc_amount_ss = 0
 let hd_plan_override = false
@@ -122,8 +124,8 @@ function setElementVisibility() {
 
 function updateAmountSpan() {
   // spans -> ss-amount, hd-amount, total-amount
-  span_helpdesk_price_val.textContent = hd_amount.toLocaleString()
-  span_selfservice_price_val.textContent = ss_amount.toLocaleString()
+  span_helpdesk_price_val.textContent = hd_span_amount.toLocaleString()
+  span_selfservice_price_val.textContent = ss_span_amount.toLocaleString()
 
   let totalAmount = ss_amount + hd_amount
 
@@ -230,6 +232,8 @@ function calcHDPrice() {
   text_discount_none.style.display = "none"
 
   if (sel_helpdesk_plan.value === "starter") {
+    hd_span_amount = num_agents.value * HD_STARTER_MONTHLY
+
     if (!cb_pay_annually.checked) {
       hd_amount = num_agents.value * HD_STARTER_MONTHLY
       disc_amount_hd = 0
@@ -240,6 +244,8 @@ function calcHDPrice() {
     }
   }
   if (sel_helpdesk_plan.value === "regular") {
+    hd_span_amount = num_agents.value * HD_REGULAR_MONTHLY
+
     if (!cb_pay_annually.checked) {
       hd_amount = num_agents.value * HD_REGULAR_MONTHLY
       disc_amount_hd = 0
@@ -250,6 +256,8 @@ function calcHDPrice() {
     }
   }
   if (sel_helpdesk_plan.value === "pro") {
+    hd_span_amount = num_agents.value * HD_PRO_MONTHLY
+
     if (!cb_pay_annually.checked) {
       hd_amount = num_agents.value * HD_PRO_MONTHLY
       disc_amount_hd = 0
@@ -260,6 +268,7 @@ function calcHDPrice() {
   }
   if (sel_helpdesk_plan.value === "enterprise") {
     hd_amount = 0
+    hd_span_amount = 0
     text_hd_price.style.display = "none"
     label_hd_custom_price.style.display = "flex"
   }
@@ -287,6 +296,8 @@ function calcSSPrice() {
   if (num_orders.value > 0 && num_orders.value <= 1000) {
     // Starter Plan
     // ss_amount = cb_pay_annually.checked ? SS_STARTER_ANNUAL : SS_STARTER_MONTHLY
+    ss_span_amount = SS_STARTER_MONTHLY
+
     if (!cb_pay_annually.checked) {
       ss_amount = SS_STARTER_MONTHLY
       disc_amount_ss = 0
@@ -298,6 +309,8 @@ function calcSSPrice() {
   if (num_orders.value > 1000 && num_orders.value <= 3500) {
     // Regular Plan
     // ss_amount = cb_pay_annually.checked ? SS_REGULAR_ANNUAL : SS_REGULAR_MONTHLY
+    ss_span_amount = SS_REGULAR_MONTHLY
+
     if (!cb_pay_annually.checked) {
       ss_amount = SS_REGULAR_MONTHLY
       disc_amount_ss = 0
@@ -309,6 +322,8 @@ function calcSSPrice() {
   if (num_orders.value > 3500 && num_orders.value < 10000) {
     // Pro Plan
     // ss_amount = cb_pay_annually.checked ? SS_PRO_ANNUAL : SS_PRO_MONTHLY
+    ss_span_amount = SS_PRO_MONTHLY
+
     if (!cb_pay_annually.checked) {
       ss_amount = SS_PRO_MONTHLY
       disc_amount_ss = 0
@@ -319,6 +334,7 @@ function calcSSPrice() {
   }
   if (num_orders.value >= 10000) {
     ss_amount = 0
+    ss_span_amount = 0
     text_ss_price.style.display = "none"
     label_ss_custom_price.style.display = "flex"
   }
