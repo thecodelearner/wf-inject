@@ -68,9 +68,6 @@ Webflow.push(function () {
 
   sel_helpdesk_plan.setAttribute("onchange", "setHelpDeskOverrride()")
   agents_slider.setAttribute("onchange", "calcHDPrice()")
-
-  cb_pay_annually.setAttribute("onchange", "calcHDPrice()")
-  cb_pay_annually.setAttribute("onchange", "calcSSPrice()")
 })
 
 function setHelpDeskOverrride() {
@@ -100,8 +97,11 @@ function sliderHandler(sliderId, sliderValue) {
 }
 
 cb_pay_annually.addEventListener("change", (event) => {
+  console.log("cb_pay_annually - change")
   setElementVisibility()
-  updateAmountSpan()
+  calcHDPrice()
+  calcSSPrice()
+  // updateAmountSpan()
   // if (event.currentTarget.checked) {
   //   alert('checked');
   // } else {
@@ -130,12 +130,13 @@ function updateAmountSpan() {
   if (cb_pay_annually.checked) {
     // span_discount_price_val.textContent = (totalAmount * 0.2).toLocaleString()
     // span_total_price_val.textContent = (totalAmount * 0.8).toLocaleString()
+    console.log("cb_pay_annually - checked")
     span_discount_price_val.textContent = (
       disc_amount_hd + disc_amount_ss
     ).toLocaleString()
     span_total_price_val.textContent = totalAmount.toLocaleString()
 
-    // TODO: Update to static pricing on annual payment
+    // // TODO: Update to static pricing on annual payment
     /* 
       Helpdesk Starter: $29/u/mo or $24/u/mo (billed annually)
       Helpdesk Regular: $49/u/mo or $40/u/mo (billed annually)
@@ -166,7 +167,6 @@ function updateSliderValue(numId, numValue) {
 
   if (numId === "num-agents-on-team") {
     agents_slider.value = numValue
-    // setHelpDeskOverrride()
     helpDeskPlanSliderOverride()
     calcHDPrice()
   }
